@@ -1,24 +1,62 @@
+import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 
 public class MallView extends StackPane {
-    public MallView(Mall mall){
+    public MallView(Mall mall) {
 
-        ShopView shop1 = new ShopView(1);
-        ShopView shop2 = new ShopView(2);
-        ShopView shop3 = new ShopView(3);
         floorArray = new floorView[mall.getFloors()];
-        for(int i = 0; i < mall.getFloors(); i++){
+        for (int i = 0; i < mall.getFloors(); i++) {
             floorArray[i] = new floorView();
         }
 
-        // pruebas de piso
-        this.getChildren().add(floorArray[1]);
-        floorArray[1].add(shop1, 0, 0);
-        floorArray[1].add(shop2, 5, 2);
-        floorArray[1].add(shop3, 3, 0);
+
+        for (int i = 0; i < mall.getFloors(); i++){
+            int j = 1;
+            floorArray[i].add(new ShopView(j++), 0, 0, 2, 1);
+            floorArray[i].add(new ShopView(j++), 2, 0, 1, 1);
+            floorArray[i].add(new ShopView(j++), 3, 0, 1, 1);
+            floorArray[i].add(new ShopView(j++), 5, 0, 1, 1);
+            floorArray[i].add(new ShopView(j++), 6, 0, 2, 1);
+            if (i != 0){
+                floorArray[i].add(new ShopView(j++), 7, 1, 1, 3);
+            }
+            else {
+                floorArray[i].add(new GeneralArea("Entrada"), 7, 1, 1, 3);
+            }
+            floorArray[i].add(new ShopView(j++), 6, 4 ,2, 1);
+            floorArray[i].add(new ShopView(j++), 5, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++), 4, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++), 3, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++), 2, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++), 1, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++), 0, 2, 1, 3);
+            floorArray[i].add(new ShopView(j), 0, 1, 1, 1);
+
+            floorArray[i].add(new GeneralArea("Baños"), 4, 0, 1, 1);
+
+        }
+
+        actualFloor = 0;
+        this.getChildren().add(floorArray[actualFloor]);
+
+        // Prueba de cambio de piso con boton
+        Button floorButton = new Button("Cambiar piso");
+        floorButton.setOnAction(e -> {
+            actualFloor = (actualFloor+1) % floorArray.length;
+            this.changeFloor(actualFloor, floorButton);
+        });
+        getChildren().add(floorButton);
+
+
+    }
+
+    // metodo de prueba de cambio de piso
+    private void changeFloor(int nextFloor, Button button){
+        this.getChildren().clear();
+        this.getChildren().addAll(floorArray[nextFloor], button);
 
     }
 
@@ -59,4 +97,5 @@ public class MallView extends StackPane {
 
     }
     private floorView[] floorArray;
+    private int actualFloor;
 }

@@ -12,9 +12,8 @@ public class MallView extends StackPane {
             floorArray[i] = new floorView();
         }
 
-
+        int j = 1;
         for (int i = 0; i < mall.getFloors(); i++){
-            int j = 1;
             floorArray[i].add(new ShopView(j++), 0, 0, 2, 1);
             floorArray[i].add(new ShopView(j++), 2, 0, 1, 1);
             floorArray[i].add(new ShopView(j++), 3, 0, 1, 1);
@@ -33,7 +32,7 @@ public class MallView extends StackPane {
             floorArray[i].add(new ShopView(j++), 2, 4, 1, 1);
             floorArray[i].add(new ShopView(j++), 1, 4, 1, 1);
             floorArray[i].add(new ShopView(j++), 0, 2, 1, 3);
-            floorArray[i].add(new ShopView(j), 0, 1, 1, 1);
+            floorArray[i].add(new ShopView(j++), 0, 1, 1, 1);
 
             floorArray[i].add(new GeneralArea("Baños"), 4, 0, 1, 1);
 

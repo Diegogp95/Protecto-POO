@@ -1,3 +1,4 @@
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -5,7 +6,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 
 public class MallView extends StackPane {
-    public MallView(Mall mall) {
+    public MallView(Mall mall, BottomPane bottomPane) {
 
         floorArray = new floorView[mall.getFloors()];
         for (int i = 0; i < mall.getFloors(); i++) {
@@ -14,25 +15,25 @@ public class MallView extends StackPane {
 
         int j = 1;
         for (int i = 0; i < mall.getFloors(); i++){
-            floorArray[i].add(new ShopView(j++), 0, 0, 2, 1);
-            floorArray[i].add(new ShopView(j++), 2, 0, 1, 1);
-            floorArray[i].add(new ShopView(j++), 3, 0, 1, 1);
-            floorArray[i].add(new ShopView(j++), 5, 0, 1, 1);
-            floorArray[i].add(new ShopView(j++), 6, 0, 2, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 0, 0, 2, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 2, 0, 1, 1);
+            floorArray[i].add(new ShopView(j++, i,bottomPane), 3, 0, 1, 1);
+            floorArray[i].add(new ShopView(j++, i,bottomPane), 5, 0, 1, 1);
+            floorArray[i].add(new ShopView(j++, i,bottomPane), 6, 0, 2, 1);
             if (i != 0){
-                floorArray[i].add(new ShopView(j++), 7, 1, 1, 3);
+                floorArray[i].add(new ShopView(j++, i,bottomPane), 7, 1, 1, 3);
             }
             else {
                 floorArray[i].add(new GeneralArea("Entrada"), 7, 1, 1, 3);
             }
-            floorArray[i].add(new ShopView(j++), 6, 4 ,2, 1);
-            floorArray[i].add(new ShopView(j++), 5, 4, 1, 1);
-            floorArray[i].add(new ShopView(j++), 4, 4, 1, 1);
-            floorArray[i].add(new ShopView(j++), 3, 4, 1, 1);
-            floorArray[i].add(new ShopView(j++), 2, 4, 1, 1);
-            floorArray[i].add(new ShopView(j++), 1, 4, 1, 1);
-            floorArray[i].add(new ShopView(j++), 0, 2, 1, 3);
-            floorArray[i].add(new ShopView(j++), 0, 1, 1, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 6, 4 ,2, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 5, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 4, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 3, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 2, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 1, 4, 1, 1);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 0, 2, 1, 3);
+            floorArray[i].add(new ShopView(j++, i, bottomPane), 0, 1, 1, 1);
 
             floorArray[i].add(new GeneralArea("Baños"), 4, 0, 1, 1);
 
@@ -41,22 +42,33 @@ public class MallView extends StackPane {
         actualFloor = 0;
         this.getChildren().add(floorArray[actualFloor]);
 
-        // Prueba de cambio de piso con boton
-        Button floorButton = new Button("Cambiar piso");
-        floorButton.setOnAction(e -> {
-            actualFloor = (actualFloor+1) % floorArray.length;
-            this.changeFloor(actualFloor, floorButton);
-        });
-        getChildren().add(floorButton);
-
-
     }
 
-    // metodo de prueba de cambio de piso
-    private void changeFloor(int nextFloor, Button button){
-        this.getChildren().clear();
-        this.getChildren().addAll(floorArray[nextFloor], button);
+    public ShopView getShopView(int id, int pfloor){
+        for(Node sw : floorArray[pfloor].getChildren()){
+            if (sw instanceof ShopView){
+                if (((ShopView) sw).getShopPlaceId()== id){
+                    return (ShopView) sw;
+                }
+            }
+        }
+        return null;
+    }
 
+    public void changeFloorUp(){
+        actualFloor++;
+        this.getChildren().clear();
+        this.getChildren().add(floorArray[actualFloor]);
+    }
+
+    public void changeFloorDown(){
+        actualFloor--;
+        this.getChildren().clear();
+        this.getChildren().add(floorArray[actualFloor]);
+    }
+
+    public int getActualFloor() {
+        return actualFloor;
     }
 
     private class floorView extends GridPane{

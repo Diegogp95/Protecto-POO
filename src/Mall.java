@@ -2,30 +2,33 @@ import java.util.ArrayList;
 
 public class Mall {
 
-    public Mall(int floorsNumber){
+    public Mall(int floorsNumber, BottomPane bottomPane){
         floors = floorsNumber;
         shopsInFloor = new ArrayList[floors];
         for(int i = 0; i < floors ; i++){
             shopsInFloor[i] = new ArrayList<Shop>();
         }
-        mallView = new MallView(this);
+        mallView = new MallView(this, bottomPane);
     }
 
-    public void addShop(String name, int floor, int placeInFloor){
-        Shop newShop = new Shop(name);
+    public int addShop(String name, int floor, int id){
+        Shop newShop = new Shop(name, id);
         shopsInFloor[floor].add(newShop);
+        return newShop.getId();
     }
-/*  Codigo vestigial de prueba de adicion de local
-    public static void main(String[] args){
-        Mall mall = new Mall(3);
-        mall.addShop("McDonalds", 1,2);
-        mall.addShop("MAUI", 1, 1);
-        for (int i = 0; i < mall.floors; i++){
-            for (Shop shop : mall.shopsInFloor[i]){
-                System.out.println(shop.getShopName()+ ", Id: " + shop.getId());
-            }
+
+
+    public void flooUp(){
+        if (mallView.getActualFloor()+1 < floors){
+            mallView.changeFloorUp();
         }
-    } */
+    }
+
+    public void floorDown(){
+        if (mallView.getActualFloor()-1 >= 0){
+            mallView.changeFloorDown();
+        }
+    }
 
     public MallView getView(){
         return mallView;
@@ -35,8 +38,16 @@ public class Mall {
         return floors;
     }
 
+    public Shop searchForShop(int floor, int id){
+        for (Shop sh : shopsInFloor[floor]) {
+            if (sh.getId() == id) {
+                return sh;
+            }
+        }
+        return null;
+    }
+
     private int floors;
-    private final int shopsPerFloor = 16;
     private ArrayList<Shop>[] shopsInFloor;
     private MallView mallView;
 }

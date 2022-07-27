@@ -11,8 +11,6 @@ public class BottomPane extends StackPane {
     public BottomPane(){
         onRentPane = new OnRentPane();
         rentedPane = new RentedPane();
-        // this.getChildren().add(rentedPane);
-
     }
     public void setMall(Mall pmall){
         mall = pmall;
@@ -79,6 +77,7 @@ public class BottomPane extends StackPane {
                     int shopId = mall.addShop(newName, shopView.getInFloor(), shopViewId);
                     shopView.setRenterId(shopId);
                     shopView.setState(ShopView.ShopState.RENTED);
+                    shopView.setStatePane(ShopView.ShopState.RENTED, newName);
                     setPane(shopView);
                     stage.close();
                 }
@@ -94,7 +93,7 @@ public class BottomPane extends StackPane {
 
     private class RentedPane extends GridPane {
         private RentedPane(){
-            setGridLinesVisible(true);
+            setGridLinesVisible(false);
             ColumnConstraints col1 = new ColumnConstraints();
             ColumnConstraints col2 = new ColumnConstraints();
             ColumnConstraints col3 = new ColumnConstraints();
@@ -172,6 +171,42 @@ public class BottomPane extends StackPane {
                 int finalI = i;
                 editButtons[i].setOnAction(e -> editShopParam(finalI));
             }
+            shopViewText = new Text();
+            deleteButton = new Button("Borrar local");
+            deleteBox = new HBox(shopViewText, deleteButton);
+            deleteBox.setSpacing(15);
+            deleteBox.setAlignment(Pos.CENTER);
+            add(deleteBox, 4, 5 , 2, 3);
+            deleteButton.setOnAction(e->deleteShopEvent());
+        }
+
+        private void deleteShopEvent(){
+            Stage stage = new Stage();
+            Text deleteText = new Text("Confirmar borrar local: "+ shopViewId);
+            HBox buttonBox = new HBox();
+            Button confirmDeleteButton = new Button("Confirmar");
+            Button cancelDeleteButton = new Button("Cancelar");
+            buttonBox.getChildren().addAll(confirmDeleteButton, cancelDeleteButton);
+            buttonBox.setAlignment(Pos.CENTER);
+            buttonBox.setSpacing(20);
+            VBox vBox = new VBox(deleteText, buttonBox);
+            vBox.setAlignment(Pos.CENTER);
+            vBox.setSpacing(20);
+            stage.setScene(new Scene(vBox, 300, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            confirmDeleteButton.setOnAction(e->{
+                ShopView shopView = mall.getView().getShopView(shopViewId, workingOnFloor);
+                int renterId = shopView.getRenterId();
+                shopView.setRenterId(-1);
+                shopView.setState(ShopView.ShopState.ONRENT);
+                shopView.setStatePane(ShopView.ShopState.ONRENT, "");
+                mall.deleteShop(workingOnFloor, renterId);
+                setPane(shopView);
+                stage.close();
+            });
+
+            cancelDeleteButton.setOnAction(e->stage.close());
+            stage.showAndWait();
         }
 
         private void editShopParam(int i){
@@ -364,7 +399,7 @@ public class BottomPane extends StackPane {
                     shopParam[18].setText(shop.getFechaConsumoGas());
                     shopParam[19].setText(shop.getNormaGas());
                     shopParam[20].setText(shop.getNumeroClienteGas());
-
+                    shopViewText.setText("Local "+ shopViewId+" ");
                 }
             }
         }
@@ -374,6 +409,9 @@ public class BottomPane extends StackPane {
         private HBox[] paramCol3;
         private Text[] shopParam;
         private Button[] editButtons;
+        private HBox deleteBox;
+        private Button deleteButton;
+        private Text shopViewText;
     }
 
     private int shopViewId;

@@ -241,10 +241,13 @@ public class Shop {
     }
 
     public String toString() {
-        return (String.valueOf(this.id) + "\t" + this.normaRecepcion + "\t" + this.normaDominio + "\t" + this.arrendatario + "\t" + this.shopName
-                + "\t" + this.precioArriendo + "\t" + this.montoGarantia + "\t" + this.fechaInicio + "\t" + this.fechaTermino + "\t" + this.giroLocal + "\t" + this.normaGiro
-                + "\t" + this.fechaTransferencia + "\t" + this.normaTransferencia + "\t" + this.fechaConsumoLuz + "\t" + this.normaLuz + "\t" + this.numeroClienteLuz
-                + "\t" + this.fechaConsumoAgua + "\t" + this.normaAgua + "\t" + this.numeroClienteAgua + "\t" + this.fechaConsumoGas + "\t" + this.normaGas + "\t" + this.numeroClienteGas);
+        return ("" + "\t" + this.viewId + "\t" + this.shopName + "\t" + this.normaRecepcion +
+                "\t" + this.normaDominio + "\t" + this.arrendatario + "\t" + this.precioArriendo + "\t" +
+                this.montoGarantia + "\t" + this.fechaInicio + "\t" + this.fechaTermino + "\t" + this.giroLocal +
+                "\t" + this.normaGiro + "\t" + this.fechaTransferencia + "\t" + this.normaTransferencia + "\t" +
+                this.fechaConsumoLuz + "\t" + this.normaLuz + "\t" + this.numeroClienteLuz + "\t" + this.fechaConsumoAgua
+                + "\t" + this.normaAgua + "\t" + this.numeroClienteAgua + "\t" + this.fechaConsumoGas + "\t" +
+                this.normaGas + "\t" + this.numeroClienteGas);
     }
 }
 

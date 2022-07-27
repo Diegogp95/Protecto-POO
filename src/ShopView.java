@@ -22,13 +22,16 @@ public class ShopView extends HBox {
         ShopPlaceId = id;
         shopArea = 52.5;
         ORView = new onRentView(ShopPlaceId);
+        rView = new rentedView();
         getChildren().add(ORView);
         setAlignment(Pos.CENTER);
 
-        setOnMouseEntered(e->{onMouseEntered();});
+        setOnMouseEntered(e->onMouseEntered());
         setOnMouseExited(e-> onMouseExited());
-        setOnMouseClicked(e->{bottomPane.setPane(this);
-            System.out.println(""+renterId);});
+        setOnMouseClicked(e->{
+            bottomPane.setPane(this);
+            //System.out.println(renterId);
+        });
     }
 
     public void onMouseEntered(){
@@ -48,6 +51,19 @@ public class ShopView extends HBox {
         RENTED
     }
 
+    public void setStatePane(ShopState state, String shopName){
+        switch (state){
+            case ONRENT:
+                getChildren().clear();
+                getChildren().add(ORView);
+                break;
+            case RENTED:
+                getChildren().clear();
+                getChildren().add(rView);
+                rView.updateRentedView(shopName);
+        }
+    }
+
     private class onRentView extends VBox {
         private onRentView(int id){
             ShopId = id;
@@ -61,13 +77,16 @@ public class ShopView extends HBox {
     }
 
     private class rentedView extends VBox{
-        private rentedView(String shopName){
-            nameDisplay = shopName;
-            Text name = new Text(nameDisplay);
+        private rentedView(){
+            name = new Text();
             getChildren().addAll(name);
             setAlignment(Pos.CENTER);
         }
-        private String nameDisplay;
+        private void updateRentedView(String nameShop){
+            name.setText(nameShop);
+        }
+
+        private Text name;
     }
 
     public int getShopPlaceId() {
@@ -101,6 +120,7 @@ public class ShopView extends HBox {
     private int ShopPlaceId;
     private ShopState state;
     private onRentView ORView;
+    private rentedView rView;
     private double shopArea;
     private int renterId = -1;
     private int inFloor;
